@@ -150,8 +150,15 @@ def get_git_history(sandbox_dir: str, limit: int = 20) -> Dict[str, Any]:
         
     try:
         # Run git log
-        log_cmd = ["git", "log", f"-n", str(limit), "--pretty=format:%h|%an|%ae|%ad|%s", "--date=short"]
-        result = subprocess.run(log_cmd, cwd=abs_base, capture_output=True, text=True, check=True)
+        log_cmd = ["git", "--no-pager", "log", f"-n", str(limit), "--pretty=format:%h|%an|%ae|%ad|%s", "--date=short"]
+        result = subprocess.run(
+            log_cmd, 
+            cwd=abs_base, 
+            capture_output=True, 
+            text=True, 
+            check=True,
+            env={**os.environ, "GIT_TERMINAL_PROMPT": "0"}
+        )
         lines = result.stdout.strip().split("\n")
         
         commits = []
