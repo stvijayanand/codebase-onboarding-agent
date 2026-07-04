@@ -3,6 +3,7 @@ import sys
 import argparse
 import asyncio
 import colorama
+import traceback
 
 # Ensure src directory is in sys.path
 src_dir = os.path.dirname(os.path.abspath(__file__))
@@ -37,7 +38,8 @@ def handle_analyze(args):
         print(f"\n{colorama.Fore.GREEN}Success! Onboarding guide generated successfully.{colorama.Style.RESET_ALL}")
         print(f"You can view it at: {output_file}")
     except Exception as e:
-        print(f"\n{colorama.Fore.RED}Error during analysis: {str(e)}{colorama.Style.RESET_ALL}", file=sys.stderr)
+        print(f"\n{colorama.Fore.RED}Error during analysis:{colorama.Style.RESET_ALL}", file=sys.stderr)
+        traceback.print_exception(type(e), e, e.__traceback__, file=sys.stderr)
         sys.exit(1)
 
 def handle_ask(args):
@@ -55,7 +57,8 @@ def handle_ask(args):
         print(answer)
         print(f"{colorama.Fore.GREEN}==================================={colorama.Style.RESET_ALL}")
     except Exception as e:
-        print(f"\n{colorama.Fore.RED}Error during Q&A session: {str(e)}{colorama.Style.RESET_ALL}", file=sys.stderr)
+        print(f"\n{colorama.Fore.RED}Error during Q&A session:{colorama.Style.RESET_ALL}", file=sys.stderr)
+        traceback.print_exception(type(e), e, e.__traceback__, file=sys.stderr)
         sys.exit(1)
 
 def handle_serve(args):

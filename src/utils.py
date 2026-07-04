@@ -20,10 +20,10 @@ def is_safe_path(base_dir: str, target_path: str) -> bool:
     common = os.path.commonpath([abs_base, abs_target])
     return common == abs_base
 
-def list_files_in_sandbox(sandbox_dir: str) -> List[Dict[str, Any]]:
+def list_files_in_sandbox(sandbox_dir: str, max_files: int = 400) -> List[Dict[str, Any]]:
     """
     Recursively lists all files in the sandbox directory.
-    Excludes binary files and typical dependency/meta directories.
+    Excludes binary files and typical dependency/meta/test/doc directories.
     """
     if not os.path.exists(sandbox_dir):
         return []
@@ -35,7 +35,8 @@ def list_files_in_sandbox(sandbox_dir: str) -> List[Dict[str, Any]]:
     exclude_dirs = {
         '.git', 'node_modules', '.venv', 'venv', '__pycache__', 
         'dist', 'build', '.idea', '.vscode', 'env', '.gemini',
-        '.agents', 'obj', 'bin'
+        '.agents', 'obj', 'bin', 'docs', 'tests', 'test', 'spec',
+        'htmlcov', 'docs_src', '.github', 'site-packages'
     }
     
     # Exclude file extensions (binaries, lock files, images, etc.)
@@ -71,6 +72,15 @@ def list_files_in_sandbox(sandbox_dir: str) -> List[Dict[str, Any]]:
                 "extension": ext
             })
             
+    if len(file_list) > max_files:
+        truncated_list = file_list[:max_files]
+        truncated_list.append({
+            "path": f"... (truncated, showing {max_files} of {len(file_list)} files. Use search_symbols to locate other files)",
+            "size": 0,
+            "extension": ""
+        })
+        return truncated_list
+        
     return file_list
 
 def read_file_safe(sandbox_dir: str, rel_path: str) -> str:

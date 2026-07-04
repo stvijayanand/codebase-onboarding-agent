@@ -8,6 +8,7 @@ if current_dir not in sys.path:
     sys.path.append(current_dir)
 
 from mcp.server.fastmcp import FastMCP
+import json
 from utils import (
     list_files_in_sandbox,
     read_file_safe,
@@ -27,9 +28,9 @@ def get_sandbox_dir() -> str:
     return os.path.abspath(path)
 
 @mcp.tool(name="list_files", description="Recursively lists all files in the repository sandbox, excluding binary files and node_modules.")
-def list_files() -> List[Dict[str, Any]]:
+def list_files() -> str:
     sandbox = get_sandbox_dir()
-    return list_files_in_sandbox(sandbox)
+    return json.dumps(list_files_in_sandbox(sandbox), indent=2)
 
 @mcp.tool(name="read_file", description="Safely reads the contents of a text file inside the sandbox by relative path.")
 def read_file(path: str) -> str:
@@ -37,19 +38,19 @@ def read_file(path: str) -> str:
     return read_file_safe(sandbox, path)
 
 @mcp.tool(name="search_symbols", description="Searches for symbols matching a regex or substring across files in the sandbox.")
-def search_symbols(query: str) -> List[Dict[str, Any]]:
+def search_symbols(query: str) -> str:
     sandbox = get_sandbox_dir()
-    return search_symbols_regex(sandbox, query)
+    return json.dumps(search_symbols_regex(sandbox, query), indent=2)
 
 @mcp.tool(name="get_git_history", description="Gets the Git commit history log and contributor analysis for the repository.")
-def git_history(limit: int = 20) -> Dict[str, Any]:
+def git_history(limit: int = 20) -> str:
     sandbox = get_sandbox_dir()
-    return get_git_history(sandbox, limit)
+    return json.dumps(get_git_history(sandbox, limit), indent=2)
 
 @mcp.tool(name="run_ast_query", description="Parses a file imports, classes, and top-level functions (AST parse for python, regex fallback for others).")
-def ast_query(path: str) -> Dict[str, Any]:
+def ast_query(path: str) -> str:
     sandbox = get_sandbox_dir()
-    return run_ast_query(sandbox, path)
+    return json.dumps(run_ast_query(sandbox, path), indent=2)
 
 if __name__ == "__main__":
     # FastMCP uses stdio transport by default if run directly

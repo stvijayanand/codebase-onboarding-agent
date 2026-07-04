@@ -1,0 +1,31 @@
+# Python bytecode / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Project sandbox cache (cloned repositories)
+cloned_repos/
+
+# Default analysis output folders
+outputs/
+onboard_output/
+temp_output/
+
+# IDE files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
