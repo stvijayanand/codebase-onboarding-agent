@@ -94,12 +94,51 @@ Show the JSON config snippet for Claude Desktop:
   "mcpServers": {
     "codebase-onboarding-concierge": {
       "command": "python",
-      "args": ["C:/Users/test.LAPTOP-GJAAATM6/Downloads/Antigravity/submission/codebase-onboarding-agent/src/mcp_server.py"],
+      "args": ["C:/path/to/codebase-onboarding-agent/src/mcp_server.py"],
       "env": {
-        "ONBOARD_REPO_PATH": "C:/Users/test.LAPTOP-GJAAATM6/Downloads/Antigravity/submission/codebase-onboarding-agent"
+        "ONBOARD_REPO_PATH": "C:/path/to/target/repo"
       }
     }
   }
 }
 ```
 *   Explain that this connects our AST search, symbol inspection, and directory-safe tools directly to their editor, ensuring they have an onboarding assistant inside their IDE.
+
+---
+
+## ☁️ Demo Route 4: Google Cloud Run Deployment & Cloud Demo
+
+Showcase the production readiness of the app by deploying the containerized Web UI to Google Cloud Run, hosting a public cloud link to share with stakeholders.
+
+### Step 1: Login and Configure Google Cloud SDK
+Ensure you have the Google Cloud SDK (`gcloud` CLI) installed, then authenticate:
+```powershell
+# Authenticate your GCP account
+gcloud auth login
+
+# Set your target Google Cloud Project ID
+gcloud config set project YOUR_GCP_PROJECT_ID
+```
+
+### Step 2: Deploy directly to Google Cloud Run
+Run the single-command deployment. This packages your source directory (including `src/static` containing the frontend) into a secure container, uploads it, and launches the service:
+```powershell
+gcloud run deploy codebase-onboarding-concierge `
+    --source . `
+    --platform managed `
+    --region us-central1 `
+    --set-env-vars GEMINI_API_KEY="your_actual_gemini_api_key" `
+    --allow-unauthenticated
+```
+*Note: Make sure to replace `your_actual_gemini_api_key` with your Google Gemini developer key.*
+
+### Step 3: Access and Show the Live Web UI Demo
+Upon successful completion, the CLI output will print a service URL (e.g., `https://codebase-onboarding-concierge-xxxx-uc.a.run.app`).
+
+1. Open this URL in any browser.
+2. The browser will load the high-fidelity dark-themed onboarding dashboard directly from Google Cloud Run.
+3. Perform the analysis and Q&A operations just as you would locally.
+4. **What to highlight:**
+    *   **Serverless Hosting**: Zero infrastructure management. The container scales down to zero when idle, saving costs.
+    *   **Secure API Handling**: The `GEMINI_API_KEY` is safely injected and encrypted as an environment variable in Cloud Run, meaning users visiting the URL can run analyses without needing their own API keys.
+    *   **Shareable URL**: Stakeholders can open this link on their desktops, tablets, or phones to test the onboarding concierge themselves.

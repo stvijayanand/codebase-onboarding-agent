@@ -156,8 +156,9 @@ gcloud run deploy codebase-onboarding-concierge \
     --set-env-vars GEMINI_API_KEY="your_gemini_api_key" \
     --allow-unauthenticated
 ```
-It will output a service URL (e.g. `https://codebase-onboarding-concierge-xxxx-uc.a.run.app`) where you can submit POST requests.
+It will output a service URL (e.g. `https://codebase-onboarding-concierge-xxxx-uc.a.run.app`). Open this URL in any browser to access and demo the interactive Web UI dashboard directly from Google Cloud.
 
+---
 ---
 
 ## Running the Unit Tests
