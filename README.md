@@ -103,19 +103,21 @@ To connect the server to Claude Desktop, add it to your configuration file (e.g.
 
 ---
 
-## Web API Server (FastAPI)
+## Web UI & API Server (FastAPI)
 
-Run the backend web server locally:
+Run the local web server to launch the interactive Web UI Dashboard:
 ```bash
 python src/server.py
 ```
-It starts on port `8080` (or `PORT` env variable) and exposes the following REST endpoints:
+It starts on port `8080` (or the `PORT` env variable) and serves a beautiful, high-fidelity dark-themed dashboard. 
 
-- **GET `/`**: Health check.
-- **POST `/analyze`**: Generates onboarding guide.
+The server exposes the following routes:
+- **GET `/`**: Serves the interactive Web UI Dashboard.
+- **GET `/api/health`**: Service health status.
+- **POST `/analyze`**: Traces the codebase and generates the onboarding guide.
   - Payload: `{"repo_url": "https://github.com/user/repo"}`
   - Returns: `{"status": "success", "onboarding_guide": "..."}`
-- **POST `/ask`**: Interactive Q&A.
+- **POST `/ask`**: Context-aware codebase Q&A.
   - Payload: `{"repo_url": "https://github.com/user/repo", "question": "where is auth handled?"}`
   - Returns: `{"status": "success", "answer": "..."}`
 

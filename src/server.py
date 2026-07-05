@@ -23,9 +23,19 @@ class AskRequest(BaseModel):
     repo_url: str
     question: str
 
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+
+# Serve frontend SPA
 @app.get("/")
+def read_root():
+    return FileResponse(os.path.join(src_dir, "static", "index.html"))
+
+@app.get("/api/health")
 def health_check():
     return {"status": "healthy", "service": "codebase-onboarding-concierge"}
+
+app.mount("/static", StaticFiles(directory=os.path.join(src_dir, "static")), name="static")
 
 @app.post("/analyze")
 async def analyze_repo(req: AnalyzeRequest):

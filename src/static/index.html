@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codebase Onboarding Concierge</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Prism.js for code block syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="background-glows">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar / Navigation -->
+        <aside class="app-sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-compass-drafting brand-icon"></i>
+                <div class="brand-text">
+                    <h1>Onboard</h1>
+                    <span>Concierge Agent</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="analyze-tab">
+                    <i class="fa-solid fa-magnifying-glass-chart"></i>
+                    <span>Analyze Codebase</span>
+                </button>
+                <button class="nav-item" id="qa-nav-btn" data-tab="qa-tab" disabled>
+                    <i class="fa-solid fa-comments"></i>
+                    <span>Interactive Q&A</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <span class="dot pulse-green"></span>
+                    <span>API Connected</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- Topbar -->
+            <header class="app-header">
+                <div class="header-title">
+                    <h2 id="page-title">Codebase Analysis</h2>
+                    <p id="page-subtitle">Map repositories and synthesize comprehensive developer onboarding guides</p>
+                </div>
+                <div class="header-actions">
+                    <div class="model-badge">
+                        <i class="fa-solid fa-microchip"></i>
+                        <span>Gemini 2.5 Flash</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Tab Content: Analyze -->
+            <section class="tab-content active" id="analyze-tab">
+                <div class="grid-layout">
+                    <!-- Left: Input Form & Progress -->
+                    <div class="card form-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-link"></i> Select Target Repository</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="analyze-form">
+                                <div class="form-group">
+                                    <label for="repo-input">Repository Source</label>
+                                    <div class="input-wrapper">
+                                        <i class="fa-brands fa-github input-icon"></i>
+                                        <input type="text" id="repo-input" placeholder="e.g. https://github.com/fastapi/fastapi or local path" required>
+                                    </div>
+                                    <small class="form-help">Enter a public HTTPS Git URL or an absolute local directory path.</small>
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="btn-submit-analyze">
+                                    <span class="btn-text">Generate Onboarding Guide</span>
+                                    <i class="fa-solid fa-arrow-right btn-icon"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Right: Console Output (while loading) -->
+                    <div class="card console-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-terminal"></i> Multi-Agent Orchestrator Feed</h3>
+                        </div>
+                        <div class="card-body console-body" id="console-output">
+                            <div class="console-placeholder">
+                                <i class="fa-solid fa-robot placeholder-icon"></i>
+                                <p>System idle. Enter a repository source and trigger analysis to start the multi-agent pipeline.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full Width: Guide Viewer (hidden by default) -->
+                    <div class="card guide-card hidden" id="guide-container">
+                        <div class="card-header guide-header">
+                            <h3><i class="fa-solid fa-file-invoice"></i> Onboarding Guide</h3>
+                            <button class="btn btn-secondary btn-sm" id="btn-copy-guide">
+                                <i class="fa-solid fa-copy"></i> Copy Markdown
+                            </button>
+                        </div>
+                        <div class="card-body guide-body markdown-body" id="guide-viewer">
+                            <!-- Rendered Markdown goes here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab Content: Q&A -->
+            <section class="tab-content" id="qa-tab">
+                <div class="chat-layout">
+                    <!-- Sidebar: Codebase Info -->
+                    <aside class="chat-info-sidebar">
+                        <div class="info-widget">
+                            <h4>Active Repo</h4>
+                            <div class="repo-badge" id="active-repo-badge">
+                                <i class="fa-brands fa-github"></i>
+                                <span class="repo-name">None Selected</span>
+                            </div>
+                        </div>
+                        <div class="info-widget suggestion-widget">
+                            <h4>Suggested Questions</h4>
+                            <div class="suggestions-list">
+                                <button class="suggestion-item">What is the high-level architecture?</button>
+                                <button class="suggestion-item">How are settings or configurations managed?</button>
+                                <button class="suggestion-item">What database or ORM is used?</button>
+                                <button class="suggestion-item">How do I run tests locally?</button>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Chat Box -->
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chat-messages-container">
+                            <div class="chat-message assistant-message">
+                                <div class="message-avatar">
+                                    <i class="fa-solid fa-robot"></i>
+                                </div>
+                                <div class="message-content">
+                                    <p>Welcome! I've indexed this codebase and have a structural overview handy. Ask me anything about how the modules connect, configuration files, libraries, or where specific logic resides.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-input-area">
+                            <form id="chat-form">
+                                <input type="text" id="chat-input" placeholder="Ask a question about the codebase..." autocomplete="off" required>
+                                <button type="submit" class="btn btn-primary btn-icon-only">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Marked for parsing markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Prism for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <!-- Handle JavaScript -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
