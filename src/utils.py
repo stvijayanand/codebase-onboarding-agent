@@ -156,7 +156,9 @@ def get_git_history(sandbox_dir: str, limit: int = 20) -> Dict[str, Any]:
             cwd=abs_base, 
             capture_output=True, 
             text=True, 
+            encoding="utf-8",
             check=True,
+            stdin=subprocess.DEVNULL,
             env={**os.environ, "GIT_TERMINAL_PROMPT": "0"}
         )
         lines = result.stdout.strip().split("\n")

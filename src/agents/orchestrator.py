@@ -48,7 +48,10 @@ def setup_repo_sandbox(repo_source: str) -> str:
             ["git", "clone", "--depth", "1", repo_source, target_path],
             check=True,
             capture_output=True,
-            text=True
+            text=True,
+            encoding="utf-8",
+            stdin=subprocess.DEVNULL,
+            env={**os.environ, "GIT_TERMINAL_PROMPT": "0"}
         )
         print("Cloning completed successfully.")
     except subprocess.CalledProcessError as e:
